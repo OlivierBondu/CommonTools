@@ -69,6 +69,7 @@ bool execute(const std::string& datasets_json, const std::string& python) {
 
     std::vector<Plot> plots;
 
+    const char* prevDir = gDirectory->GetPath();
     Py_Initialize();
 
     const std::string PLOTS_KEY_NAME = "plots";
@@ -111,6 +112,7 @@ bool execute(const std::string& datasets_json, const std::string& python) {
     }
 
     Py_Finalize();
+    gROOT->GetDirectory( prevDir )->cd();
 
     if (plots.empty())
         return false;
@@ -231,11 +233,7 @@ int main( int argc, char* argv[]) {
 
         bool ret = false;
         if (python)
-        {
-            const char* prevDir = gDirectory->GetPath();
             ret = execute(datasetArg.getValue(), plots[0]);
-            gROOT->GetDirectory( prevDir )->cd();
-        }
         else
             ret = execute(datasetArg.getValue(), plots);
 
