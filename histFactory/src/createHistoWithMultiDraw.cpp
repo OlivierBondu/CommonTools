@@ -10,6 +10,8 @@
 #include <memory>
 #include <cstdio>
 
+#include "TROOT.h"
+#include "TRint.h"
 #include <TVirtualTreePlayer.h>
 #include <TMultiDrawTreePlayer.h>
 #include <TChain.h>
@@ -229,7 +231,11 @@ int main( int argc, char* argv[]) {
 
         bool ret = false;
         if (python)
+        {
+            const char* prevDir = gDirectory->GetPath();
             ret = execute(datasetArg.getValue(), plots[0]);
+            gROOT->GetDirectory( prevDir )->cd();
+        }
         else
             ret = execute(datasetArg.getValue(), plots);
 
