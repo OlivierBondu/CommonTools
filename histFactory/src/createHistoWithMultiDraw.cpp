@@ -10,8 +10,6 @@
 #include <memory>
 #include <cstdio>
 
-#include "TROOT.h"
-#include "TRint.h"
 #include <TVirtualTreePlayer.h>
 #include <TMultiDrawTreePlayer.h>
 #include <TChain.h>
@@ -69,7 +67,7 @@ bool execute(const std::string& datasets_json, const std::string& python) {
 
     std::vector<Plot> plots;
 
-    const char* prevDir = gDirectory->GetPath();
+    TDirectory* g = gDirectory;
     Py_Initialize();
 
     const std::string PLOTS_KEY_NAME = "plots";
@@ -112,7 +110,7 @@ bool execute(const std::string& datasets_json, const std::string& python) {
     }
 
     Py_Finalize();
-    gROOT->GetDirectory( prevDir )->cd();
+    gDirectory = g;
 
     if (plots.empty())
         return false;
